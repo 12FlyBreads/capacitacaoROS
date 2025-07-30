@@ -15,17 +15,29 @@ Essa simulação foi um pouco mais simplificada, generalizando a potencia dos mo
 
 ## Estrutura do código
 O código está na branch 'capacitacao', e é estruturado da seguinte forma:
+
 ├── launch
+
 │   └── sim.launch.py // código para dar launch
+
 ├── sim_drone/
+
 │   ├── __init__.py // inicialização obrigatória
+
 │   ├── lidar_node.py // sensor lidar (nó que comunica com o drone)
+
 │   ├── obstaculos.py // criação do obstaculo (para facilitar a simulação, funciona como um nó que comunica com o drone e o sensor)
+
 │   └── drone_node.py // nó do drone (arquivo principal da simulação)
+
 ├── CMakeLists.txt
+
 ├── package.xml
+
 ├── setup.cfg
+
 └── setup.py
+
 
 ## Como Rodar
 ```bash
