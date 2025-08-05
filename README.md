@@ -1,46 +1,93 @@
-# capacitacaoROS
-Projeto de capacitação em ROS2 da Black Bee Drones. O projeto consiste na simulação dos atributos de um drone (como potência dos motores, posição estimada e estado da missão), tudo isso utilizando o ROS2 e printando os valores no terminal.
+# 🤖 ROS 2 Training - Drone Simulation
+
+A ROS 2 training project by the **Black Bee Drones** team.
+
+The goal of this project is to simulate a drone's attributes and behavior (such as motor power, estimated position, and mission state), using the communication between ROS 2 nodes to orchestrate a simple task. The entire simulation runs in the terminal, focusing on ROS architecture and communication.
+
 ---
-## Funcionamento
-O código criado foi algo bem mais simplificado do que a outra versão gráfica de simulação de drone, consistindo apenas numa pequena task para o drone realizar:
-1. TAKEOFF no ponto (0,0,0) até 5 metros de altura;
-2. MISSION = o drone se locomove em direção do eixo Z, e caso aviste um obstaculo ele deve desviar no eixo X e depois retornar a X=0 (essa parte foi bem simplificada, e o ponto mais levado em consideração  foi a utilização de ROS2);
-3. LAND quando o drone chegar no destino (0,y,10);
-4. IDLE quando for concluido e drone permanecer parado.
-Essa simulação foi um pouco mais simplificada, generalizando a potencia dos motores na movimentação e não utilizando parametros de orientação (pitch, yaw, roll e throttle). O ponto principal focado nesse projeto foi a utilização do ROS2 na comunicação de nós.
-   
-## Tecnologias Utilizadas
-- Python
-- ROS2
 
-## Estrutura do código
-O código está na branch 'capacitacao', e é estruturado da seguinte forma:
+## 🎯 The Drone's Mission
 
-├── launch
+Unlike a complex graphical simulation, this project focuses on a mission task with well-defined states, controlled entirely by ROS 2 nodes:
 
-│   └── sim.launch.py // código para dar launch
+1.  **TAKEOFF**
+    * The drone starts at the point `(0, 0, 0)` and ascends until it reaches a height of 5 meters.
 
-├── sim_drone/
+2.  **MISSION**
+    * The drone moves towards a destination point.
+    * During its path, if the LiDAR sensor detects an obstacle, the drone must dodge it on the X-axis, go around it, and then return to its original route (X=0).
 
-│   ├── __init__.py // inicialização obrigatória
+3.  **LAND**
+    * Upon reaching the final destination, the drone begins the landing procedure until it is on the ground.
 
-│   ├── lidar_node.py // sensor lidar (nó que comunica com o drone)
+4.  **IDLE**
+    * After landing, the drone completes its mission and remains in an idle state.
 
-│   ├── obstaculos.py // criação do obstaculo (para facilitar a simulação, funciona como um nó que comunica com o drone e o sensor)
+> **Note**: Flight physics (pitch, yaw, roll) and motor power have been generalized to simplify the simulation. The main focus of the project was the practical application of communication between multiple nodes in the ROS 2 ecosystem.
 
-│   └── drone_node.py // nó do drone (arquivo principal da simulação)
+---
 
-├── CMakeLists.txt
+## 🛠️ Technologies Used
 
-├── package.xml
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![ROS 2](https://img.shields.io/badge/ROS_2-Humble-22314E?style=for-the-badge&logo=ros&logoColor=white)
 
-├── setup.cfg
+---
 
-└── setup.py
+## 📁 Project Structure
 
+All the source code for this project is in the `capacitacao` branch. The ROS 2 workspace (`ros2_ws`) is structured as follows:
 
-## Como Rodar
 ```bash
-# Comando launch
-ros2 launch sim_drone sim.launch.py
+.
+├── src
+│   └── sim_drone           # ROS 2 Package
+│       ├── launch
+│       │   └── sim.launch.py   # File to start all nodes
+│       ├── sim_drone
+│       │   ├── __init__.py
+│       │   ├── drone_node.py     # Main drone node (controls the mission)
+│       │   ├── lidar_node.py     # LiDAR sensor node (publishes detections)
+│       │   └── obstaculos.py   # Node that simulates the existence of obstacles
+│       ├── package.xml
+│       ├── setup.cfg
+│       └── setup.py
+└── ...
+```
 
+---
+
+## 🚀 How to Run
+
+To run the simulation, make sure you have ROS 2 (Humble or newer) installed and follow the steps below in your terminal.
+
+1.  **Clone the repository**
+    ```bash
+    cd ~/ros2_ws/src
+    git clone git@github.com:12FlyBreads/capacitacaoROS.git
+    cd capacitacaoROS
+    ```
+
+2.  **Check out the correct branch**
+    ```bash
+    git checkout capacitacao
+    ```
+
+3.  **Build the ROS 2 package**
+    (Navigate to the root of your workspace, e.g., `cd ros2_ws`)
+    ```bash
+    colcon build --packages-select sim_drone
+    ```
+
+4.  **Source the environment**
+    ```bash
+    source install/setup.bash
+    ```
+
+5.  **Run the launch file**
+    The following command will start all the necessary nodes for the simulation.
+    ```bash
+    ros2 launch sim_drone sim.launch.py
+    ```
+
+You will now see the drone's status printed in your terminal as it executes the mission!
